@@ -1,5 +1,5 @@
 import smdb_api as API
-import json, threading
+import json, threading, bar
 from time import sleep, time
 from os import path, walk, mkdir
 from fuzzywuzzy import fuzz
@@ -50,8 +50,10 @@ class subject:
             self.lvl_up_callback(self.lvl, self.name)
 
     def return_stats(self):
+        _bar = bar.loading_bar("", 100*(1+self.lvl), percentage=False)
+        _bar.update(self.xp, show=False)
         ret = f"{self.name}: {self.lvl} lvl\n"
-        ret += f"{100*(1+self.lvl) - self.xp} xp to the next lvl.{' In progress' if self.started else ''}\n"
+        ret += f"{100*(1+self.lvl) - self.xp} xp to the next lvl.{' In progress' if self.started else _bar.bar()}\n"
         return ret
 
     def learning(self):
@@ -70,9 +72,10 @@ class subject:
             sleep(1)
         delta = ((now - self.started_at % 3600) % 1800 )% 30
         self.xp += (self.xp_increment/30) * delta
+        self.save()
     
     def stop(self):
-        self.stared = False
+        self.started = False
 
 class user:
     def __init__(self, id, name, subjects, client):
@@ -143,7 +146,6 @@ class user:
                 return
         self.subjects[subject].stop()
         self.client.send_message(f"Stopped {subject}.", destination=self.id)
-        self.save()
 
     def get_status(self, subject):
         to_send = "```\n"

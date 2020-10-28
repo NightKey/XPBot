@@ -53,7 +53,7 @@ class subject:
         _bar = bar.loading_bar("", 100*(1+self.lvl), percentage=False)
         _bar.update(self.xp, show=False)
         ret = f"{self.name}: {self.lvl} lvl\n"
-        ret += f"{100*(1+self.lvl) - self.xp} xp to the next lvl.{' In progress' if self.started else _bar.bar()}\n"
+        ret += f"{100*(1+self.lvl) - self.xp} xp to the next lvl.\n{'In progress' if self.started else _bar.bar()}\n"
         return ret
 
     def learning(self):

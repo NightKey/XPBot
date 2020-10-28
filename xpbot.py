@@ -42,10 +42,10 @@ class subject:
             json.dump(tmp, f)
 
     def increase_xp(self, bonus=1):
-        self.xp += self.xp_increment*bonus
-        if self.xp == 100*(1+self.lvl):
+        self.xp += round(self.xp_increment*bonus, ndigits=2)
+        if self.xp >= 100*(1+self.lvl):
             self.lvl += 1
-            self.xp = 0
+            self.xp = self.xp - 100*(1+self.lvl)
             self.xp_increment += 0.5
             self.lvl_up_callback(self.lvl, self.name)
 

@@ -50,7 +50,7 @@ class subject:
             self.lvl_up_callback(self.lvl, self.name)
 
     def return_stats(self):
-        _bar = bar.loading_bar("", 100*(1+self.lvl), percentage=False)
+        _bar = bar.loading_bar("", 100*(1+self.lvl), percentage=False, size=50)
         _bar.update(self.xp, show=False)
         ret = f"{self.name}: {self.lvl} lvl\n"
         ret += f"{100*(1+self.lvl) - self.xp} xp to the next lvl.\n{'In progress' if self.started else _bar.bar()}\n"

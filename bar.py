@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 if sys.version_info[0] < 3:
     print("Python version 2.x.x detected!\nPlease make sure, to use python 3.x.x for best resoults!")

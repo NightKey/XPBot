@@ -207,12 +207,23 @@ def add_subject(userID, subject):
 def remove_subject(userID, subject):
     users[userID].remove_subject(subject)
 
+def update():
+    import updater
+    if updater.main():
+        for user, user_data in users.items():
+            for subject in user_data.subjects.values():
+                stop(user, subject)
+            user_data.save()
+        client.close("Update")
+        from os import system
+        system("restarter.bat")
+
 if __name__ == "__main__":
     if not path.exists("data"):
         mkdir("data")
     if not path.exists("subjects"):
         mkdir("subjects")
-    client = API.API("XPBot", "19927a7bf1dbf16d70d6dad81ed5a45ef60ab6f41645c68feaa3b870e3e9c65a")
+    client = API.API("XPBot", "19927a7bf1dbf16d70d6dad81ed5a45ef60ab6f41645c68feaa3b870e3e9c65a", update_function=update)
     load()
     client.validate()
     client.create_function("createprofile", "Creates a profile, with the given subjects.\nUsage: &createprofile [subject1 subject2 ... subjectx]\nCategory: USER",

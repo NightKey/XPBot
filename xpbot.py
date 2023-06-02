@@ -87,7 +87,7 @@ class user:
     def __init__(self, id, name, subjects, client):
         self.id = id
         self.name = name
-        self.client = client
+        self.client: API.API = client
         self.subjects: Dict[str, subject] = {}
         if isinstance(subjects, str):
             for _subject in subjects.split(' '):
@@ -222,6 +222,10 @@ def add_subject(message: API.Message):
     uid = message.sender
     subject = message.content if message.content != "" else client.get_user_status(
         uid, API.Events.activity)
+    if subject is None:
+        client.send_message(
+            "No subject is specified and no activity is detected!", message.interface, message.sender)
+        return
     users[uid].add_subject(subject)
 
 
@@ -229,6 +233,10 @@ def remove_subject(message: API.Message):
     uid = message.sender
     subject = message.content if message.content != "" else client.get_user_status(
         uid, API.Events.activity)
+    if subject is None:
+        client.send_message(
+            "No subject is specified and no activity is detected!", message.interface, message.sender)
+        return
     users[uid].remove_subject(subject)
 
 

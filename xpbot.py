@@ -219,6 +219,7 @@ def load():
 
 
 def add_subject(message: API.Message):
+    should_start = message.content == ""
     uid = message.sender
     subject = message.content if message.content != "" else client.get_user_status(
         uid, API.Events.activity)
@@ -227,6 +228,8 @@ def add_subject(message: API.Message):
             "No subject is specified and no activity is detected!", message.interface, message.sender)
         return
     users[uid].add_subject(subject)
+    if should_start:
+        users[uid].start(subject)
 
 
 def remove_subject(message: API.Message):

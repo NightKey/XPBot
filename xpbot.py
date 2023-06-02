@@ -206,14 +206,6 @@ def create_profile(message: API.Message):
     users[message.sender] = user(message.sender, name, message.content, client)
 
 
-def start(message: API.Message):
-    users[message.sender].start(message.content)
-
-
-def stop(message: API.Message):
-    users[message.sender].stop(message.content)
-
-
 def XPStatus(message: API.Message):
     users[message.sender].get_status(message.content)
 
@@ -227,11 +219,17 @@ def load():
 
 
 def add_subject(message: API.Message):
-    users[message.sender].add_subject(message.content)
+    uid = message.sender
+    subject = message.content if message.content != "" else client.get_user_status(
+        uid, API.Events.activity)
+    users[uid].add_subject(subject)
 
 
 def remove_subject(message: API.Message):
-    users[message.sender].remove_subject(message.content)
+    uid = message.sender
+    subject = message.content if message.content != "" else client.get_user_status(
+        uid, API.Events.activity)
+    users[uid].remove_subject(subject)
 
 
 def event_handler(before: str, after: str, message: API.Message) -> None:
@@ -250,7 +248,7 @@ def update():
     if updater.main():
         for user, user_data in users.items():
             for subject in user_data.subjects.values():
-                stop(user, subject)
+                users[user].stop(subject)
             user_data.save()
         client.close("Update")
         from os import system
@@ -268,10 +266,6 @@ if __name__ == "__main__":
     client.validate()
     client.create_function("createprofile", "Creates a profile, with the given subjects.\nUsage: &createprofile [subject1 subject2 ... subjectx]\nCategory: USER",
                            create_profile)
-    client.create_function("start", "Starts the learning of the selected subject.\nUsage: &start <subject1>\nCategory: USER",
-                           start)
-    client.create_function("stop", "Stops the learning of the selected subject.\nUsage: &stop <subject1>\nCategory: USER",
-                           stop)
     client.create_function("addsubject", "Adds a subject to your list.\nUsage: &addsubject <subject1>\nCategory: USER",
                            add_subject)
     client.create_function("removesubject", "Removes a subject from your list.\nUsage: &removesubject <subject1>\nCategory: USER",

@@ -144,6 +144,7 @@ class user:
             self.subjects[_subject] = subject(
                 _subject, self.name, self.lvl_up_callback)
             self.subjects[_subject].save()
+            self.save()
             self.client.send_message(
                 f"Added {_subject} to your subjects!", destination=self.id, interface=API.Interface.Discord)
         else:

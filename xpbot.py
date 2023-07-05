@@ -182,10 +182,10 @@ class user:
                 subject = ret[0]
             else:
                 self.client.send_message(
-                    f"You probably wanted {ret[0]}.", destination=self.id)
+                    f"You probably wanted {ret[0]}.", interface=API.Interface.Discord, destination=self.id)
                 return
         del self.subjects[subject]
-        self.client.send_message(f"{subject} removed!", destination=self.id)
+        self.client.send_message(f"{subject} removed!", interface=API.Interface.Discord, destination=self.id)
 
     def save(self):
         tmp = {}
